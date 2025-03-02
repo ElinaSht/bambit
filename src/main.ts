@@ -1,11 +1,8 @@
-import { createHead } from '@unhead/vue'
 import { createApp } from 'vue'
-import './styles/index.css'
+import './style.css'
 import App from './App.vue'
+import { VueQueryPlugin } from '@tanstack/vue-query'
+import { createPinia } from 'pinia'
 
-const head = createHead()
-const app = createApp(App)
 
-app.use(head)
-
-app.mount('#app')
+createApp(App).use(createPinia()).use(VueQueryPlugin).mount('#app')
