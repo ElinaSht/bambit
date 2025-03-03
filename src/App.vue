@@ -6,9 +6,9 @@ import PhotosTable from '@/components/PhotosTable.vue'
 </script>
 
 <template>
-  <div class="size-full py-[20px]">
-    <Card class="flex flex-col mx-auto rounded-md size-fit">
-      <CardHeader>
+  <div class="flex size-full py-[20px] overflow-auto max-sm:p-[10px]">
+    <Card class="flex flex-col max-w-max max-h-max mx-auto rounded-md size-full overflow-auto max-sm:shadow-none max-sm:border-none">
+      <CardHeader class="max-sm:px-0">
         <CardTitle class="flex items-center">
           <div class="flex-1 text-center">Photos list</div>
 
@@ -16,10 +16,10 @@ import PhotosTable from '@/components/PhotosTable.vue'
         </CardTitle>
       </CardHeader>
 
-      <CardContent class="m-[40px] flex flex-col gap-[40px]">
+      <CardContent class="mt-[20px] flex flex-col gap-[20px] overflow-auto max-sm:p-0 max-sm:mt-0">
         <SearchPanel />
 
-          <PhotosTable />
+        <PhotosTable />
       </CardContent>
     </Card>
   </div>

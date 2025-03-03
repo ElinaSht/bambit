@@ -61,6 +61,10 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply w-dvw h-dvh bg-background text-foreground overflow-auto;
+  }
+
+  #app {
+    @apply size-full overflow-auto;
   }
 }

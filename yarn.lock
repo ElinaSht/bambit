@@ -186,6 +186,11 @@
     "@floating-ui/utils" "^0.2.9"
     vue-demi ">=0.13.0"
 
+"@gradin/tailwindcss-scrollbar@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@gradin/tailwindcss-scrollbar/-/tailwindcss-scrollbar-3.0.1.tgz#c6056e5b8a46fe044fb840be6e0c80bbdde5ccc6"
+  integrity sha512-diXlxbgX4JU/uUJsL54SWpL7Ek3FdZmL/QyBBk6wSSVcd4zQL8Jk6CgpPyY7qy1jymAS6E/P+YY1rs6coiSWAA==
+
 "@iconify-json/radix-icons@^1.2.2":
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@iconify-json/radix-icons/-/radix-icons-1.2.2.tgz#9ffbe51a7387c993cd6c2dfe03aa4893922feedf"

@@ -4,18 +4,22 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { FlexRender, getCoreRowModel, getSortedRowModel, useVueTable } from '@tanstack/vue-table'
 import { usePhotosStore } from '@/stores/photos-store.ts'
-import { ref, shallowRef } from 'vue'
+import { ref, shallowRef, watch } from 'vue'
 import { useIntersectionObserver, whenever } from '@vueuse/core'
 import { columns } from '@/const/columns.ts'
 import { valueUpdater } from '@/lib/utils.ts'
+import type { Photo } from '@/dto/photo.ts'
 
 const store = usePhotosStore()
 
 const rootRef = shallowRef<HTMLElement>()
-whenever(() => store.data, () => rootRef.value?.scrollTo({ top: 0 }))
-
 const lastRow = ref(20)
-whenever(() => store.data, () => lastRow.value = 20)
+function refresh() {
+  rootRef.value?.scrollTo({ top: 0 })
+  lastRow.value = 20
+}
+whenever(() => store.photos, () => refresh())
+
 const lastRowRef = shallowRef<HTMLElement>()
 function onGetRef(el: HTMLElement, index: number) {
   if (index === lastRow.value - 5) {
@@ -29,12 +33,11 @@ useIntersectionObserver(lastRowRef, ([entry]) => {
 })
 
 const sorting = ref([])
-const table = useVueTable({
-  get data() {
-    if (store.loading)
-      return Array.from({ length: 20 }, () => ({}))
+watch(sorting, () => refresh())
 
-    return (store.data ?? []).slice(0, lastRow.value)
+const table = useVueTable<Photo>({
+  get data() {
+    return store.loading ? Array.from({ length: 20 }, () => ({})) as Photo[] : store.photos ?? []
   },
   get columns() {
     return columns
@@ -51,10 +54,10 @@ const table = useVueTable({
 </script>
 
 <template>
-  <div ref="rootRef" class="border rounded-md h-[600px] w-[600px] overflow-auto">
+  <div ref="rootRef" class="border rounded-md max-h-[600px] max-w-[600px] overflow-auto">
 
     <Table>
-      <TableHeader class="sticky top-0 bg-white z-10">
+      <TableHeader class="sticky top-0 bg-white z-10 dark:bg-black">
         <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
           <TableHead v-for="header in headerGroup.headers" :key="header.id" class="px-1">
             <FlexRender
@@ -68,7 +71,7 @@ const table = useVueTable({
       </TableHeader>
 
       <TableBody>
-        <TableRow v-for="(row, i) in table.getRowModel().rows" :key="row.id" :ref="(el) => onGetRef(el, i)">
+        <TableRow v-for="(row, i) in table.getRowModel().rows.slice(0, lastRow)" :key="row.id" :ref="(el) => onGetRef(el, i)">
           <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
             <Skeleton v-if="store.loading" class="w-full h-5 rounded-full" />
             <TooltipProvider v-else>
